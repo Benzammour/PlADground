@@ -4,11 +4,11 @@
     name: Europe/Rome
   become: yes
 
-- name: Add multiverse repository 
-  shell: apt-add-repository multiverse -y
-  args:
-    executable: /bin/bash
-  become: yes
+#- name: Add multiverse repository
+#  shell: apt-add-repository multiverse -y
+#  args:
+#    executable: /bin/bash
+#  become: yes
 
 - name: Update and upgrade apt packages
   apt:
@@ -17,11 +17,7 @@
   become: yes
 
 - name: Install important tools
-  apt: 
-    name: ['krb5-user', 'chrony', 'python3-pip', 'realmd', 'sssd', 'sssd-tools', 'libnss-sss', 'libpam-sss', 'adcli', 'samba-common-bin', 'oddjob', 'oddjob-mkhomedir', 'packagekit']
+  apt:
+    name: ["python3", "python3-pip", "jq", "git", "curl"]
     state: present
-  become: yes
-
-- pip:
-    name: pexpect
   become: yes

@@ -1,0 +1,3 @@
+- give elastic host enough resources (4c/8gb ram)
+- run as superuser or create `/opt/ludus/resources/elastic` on host with correct permissions
+-

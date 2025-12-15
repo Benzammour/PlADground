@@ -1,3 +1,28 @@
+- name: Install important tools
+  apt:
+    name:
+      [
+        "krb5-user",
+        "chrony",
+        "python3-pip",
+        "realmd",
+        "sssd",
+        "sssd-tools",
+        "libnss-sss",
+        "libpam-sss",
+        "adcli",
+        "samba-common-bin",
+        "oddjob",
+        "oddjob-mkhomedir",
+        "packagekit",
+      ]
+    state: present
+  become: yes
+
+- pip:
+    name: pexpect
+  become: yes
+
 - name: Change file /etc/systemd/resolved.conf
   template:
     src: resolved.conf.j2
@@ -27,7 +52,7 @@
     command: "realm join {{ domain }}"
     responses:
       "Password for Administrator:": "{{ Administrator_pass }}"
-  when: '"cyberloop.local" not in response.stdout_lines' 
+  when: '"cyberloop.local" not in response.stdout_lines'
   become: yes
 
 - name: Modify /etc/pam.d/common-account to create home dir automatically when logging in with AD users
@@ -35,3 +60,4 @@
     src: common-account
     dest: /etc/pam.d/common-account
   become: yes
+

@@ -30,3 +30,6 @@ ansible_winrm_server_cert_validation=ignore
 
 [ubuntu_outside]
 192.168.56.14
+
+[ubuntu_outside:vars]
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'

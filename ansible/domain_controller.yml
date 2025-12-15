@@ -3,122 +3,122 @@
   hosts: domain_controller
   serial: 1
   roles:
-  - common
-  - domain_controller
+    - common
+    - domain_controller
 
   tasks:
-  - name: disable enhanced exit codes
-    win_chocolatey_feature:
-      name: useEnhancedExitCodes
-      state: disabled
+    - name: disable enhanced exit codes
+      win_chocolatey_feature:
+        name: useEnhancedExitCodes
+        state: disabled
 
-  - name: Install multiple packages sequentially
-    win_chocolatey:
-      name: '{{ item }}'
-      state: present
-    with_items:
-    - notepadplusplus
-    - putty
-    - python
-    - git
-    - 7zip
-    - sysinternals
-    - wget
-    - pstools
+    - name: Install multiple packages sequentially
+      win_chocolatey:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - notepadplusplus
+        - putty
+        - python3
+        - git
+        - 7zip
+        # - sysinternals # currently broken
+        - wget
+        - pstools
 
-  - name: Check for xDnsServer Powershell module
-    win_psmodule:
-      name: xDnsServer
-      repository: PSGallery
-      state: present
+    - name: Check for xDnsServer Powershell module
+      win_psmodule:
+        name: xDnsServer
+        repository: PSGallery
+        state: present
 
-  - name: Configure DNS Forwarders
-    win_dsc:
-      resource_name: xDnsServerForwarder
-      IsSingleInstance: "yes"
-      UseRootHint: false
-      IPAddresses:
-        - "1.1.1.1"
-        - "8.8.8.8"
+    - name: Configure DNS Forwarders
+      win_dsc:
+        resource_name: xDnsServerForwarder
+        IsSingleInstance: "yes"
+        UseRootHint: false
+        IPAddresses:
+          - "1.1.1.1"
+          - "8.8.8.8"
 
-  - name: Ensure that admin@cyberloop.local is present as Domain Admin
-    microsoft.ad.user:
-      name: admin
-      password: StrongPass123!
-      password_never_expires: yes
-      state: present
-      path: cn=Users,dc=CYBERLOOP,dc=local
-      groups:
-        set:
-          - Domain Admins
+    - name: Ensure that admin@cyberloop.local is present as Domain Admin
+      microsoft.ad.user:
+        name: admin
+        password: StrongPass123!
+        password_never_expires: yes
+        state: present
+        path: cn=Users,dc=CYBERLOOP,dc=local
+        groups:
+          set:
+            - Domain Admins
 
-  - name: Ensure that bob@cyberloop.local is present in OU cn=Users,dc=CYBERLOOP,dc=local
-    microsoft.ad.user:
-      name: bob
-      password: StrongPass123!
-      password_never_expires: yes
-      state: present
-      path: cn=Users,dc=CYBERLOOP,dc=local
-      groups:
-        set:
-          - Users
+    - name: Ensure that bob@cyberloop.local is present in OU cn=Users,dc=CYBERLOOP,dc=local
+      microsoft.ad.user:
+        name: bob
+        password: StrongPass123!
+        password_never_expires: yes
+        state: present
+        path: cn=Users,dc=CYBERLOOP,dc=local
+        groups:
+          set:
+            - Users
 
-  - name: Ensure that alice@cyberloop.local is present in OU cn=Users,dc=CYBERLOOP,dc=local
-    microsoft.ad.user:
-      name: alice
-      password: StrongPass123!
-      password_never_expires: yes
-      state: present
-      path: cn=Users,dc=CYBERLOOP,dc=local
-      groups:
-        set:
-          - Users
+    - name: Ensure that alice@cyberloop.local is present in OU cn=Users,dc=CYBERLOOP,dc=local
+      microsoft.ad.user:
+        name: alice
+        password: StrongPass123!
+        password_never_expires: yes
+        state: present
+        path: cn=Users,dc=CYBERLOOP,dc=local
+        groups:
+          set:
+            - Users
 
-  - name: Create AllTeams group
-    microsoft.ad.group:
-      name: allTeams
-      scope: global
-      path: DC=cyberloop,DC=local
-      state: present
+    - name: Create AllTeams group
+      microsoft.ad.group:
+        name: allTeams
+        scope: global
+        path: DC=cyberloop,DC=local
+        state: present
 
-  - name: Create DBAOracle
-    microsoft.ad.group:
-      name: DBAOracle
-      scope: global
-      path: DC=cyberloop,DC=local
-      state: present
+    - name: Create DBAOracle
+      microsoft.ad.group:
+        name: DBAOracle
+        scope: global
+        path: DC=cyberloop,DC=local
+        state: present
 
-  - name: Create DBASQLServer
-    microsoft.ad.group:
-      name: DBASQLServer
-      scope: global
-      path: DC=cyberloop,DC=local
-      state: present
+    - name: Create DBASQLServer
+      microsoft.ad.group:
+        name: DBASQLServer
+        scope: global
+        path: DC=cyberloop,DC=local
+        state: present
 
-  - name: Create DBAMongo group
-    microsoft.ad.group:
-      name: DBAMongo
-      scope: global
-      path: DC=cyberloop,DC=local
-      state: present
+    - name: Create DBAMongo group
+      microsoft.ad.group:
+        name: DBAMongo
+        scope: global
+        path: DC=cyberloop,DC=local
+        state: present
 
-  - name: Create DBARedis group
-    microsoft.ad.group:
-      name: DBARedis
-      scope: global
-      path: DC=cyberloop,DC=local
-      state: present
+    - name: Create DBARedis group
+      microsoft.ad.group:
+        name: DBARedis
+        scope: global
+        path: DC=cyberloop,DC=local
+        state: present
 
-  - name: Create DBAEnterprise Group ...
-    microsoft.ad.group:
-      name: DBAEnterprise
-      scope: global
-      path: DC=cyberloop,DC=local
-      state: present
+    - name: Create DBAEnterprise Group ...
+      microsoft.ad.group:
+        name: DBAEnterprise
+        scope: global
+        path: DC=cyberloop,DC=local
+        state: present
 
-  - name: Create a Test Group ...
-    microsoft.ad.group:
-      name: HoneypotGroup
-      scope: global
-      path: DC=cyberloop,DC=local
-      state: present
+    - name: Create a Test Group ...
+      microsoft.ad.group:
+        name: HoneypotGroup
+        scope: global
+        path: DC=cyberloop,DC=local
+        state: present
